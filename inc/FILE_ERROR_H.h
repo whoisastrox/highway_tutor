@@ -2,7 +2,7 @@
 #define FILE_ERROR_H
 #include <stdexcept>
 using namespace std;
-class file_error : runtime_error {
+class file_error : public runtime_error {
 	private:
 		int error_value;
 	public:

@@ -3,6 +3,7 @@
 #include "SVINCOLO_H.h"
 #include "VARCO_H.h"
 #include <vector>
+#include <iterator>
 using namespace std;
 
 class Autostrada {
@@ -14,6 +15,8 @@ private:
 public:
 	Autostrada();
 	void ordina();
+	vector<svincolo>::iterator iterSvincoli();
+	vector<varco>::iterator iterVarchi();
 
 
 };

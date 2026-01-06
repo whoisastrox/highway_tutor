@@ -67,3 +67,10 @@ void Autostrada::ordina() {
 		{ return a.getDist() < b.getDist(); }
 	);
 }
+
+vector<svincolo>::iterator Autostrada::iterSvincoli() {
+	return svincoli.begin();
+}
+vector<varco>::iterator Autostrada::iterVarchi() {
+	return varchi.begin();
+}
