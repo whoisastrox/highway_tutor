@@ -74,3 +74,23 @@ vector<svincolo>::iterator Autostrada::iterSvincoli() {
 vector<varco>::iterator Autostrada::iterVarchi() {
 	return varchi.begin();
 }
+vector<svincolo> Autostrada::getCoppia() {
+	srand(time(NULL)); //inizializzazione per generazione numeri random
+	int ingresso, uscita;
+	if (svincoli.size() == 2) {
+		ingresso = 0;
+		uscita = 1;
+	}
+	else {
+		ingresso = rand() % (svincoli.size() - 2); //genera un numero casuale tra 0 e v.size()-2 in modo da non includere l'ultimo svincolo come svincolo di ingresso
+		uscita = ingresso + 1 + rand() % (svincoli.size() - 1);//genera un numero casuale successivo a ingresso e che sia al massimo l'ultimo svincolo
+	}
+	if (uscita > svincoli.size() - 1) {
+		uscita = svincoli.size() - 1;
+	}
+	ordina(); //ordino gli svincoli (e anche i varchi) in modo da poter prendere lo svincolo nel vector con indice ingresso/uscita correttamente
+	vector<svincolo> ret;
+	ret.push_back(svincoli[ingresso]);
+	ret.push_back(svincoli[uscita]);
+	return ret;
+}

@@ -1,8 +1,8 @@
 #include "VARCO_H.h"
-int varco::count = 0;
+int varco::countVarc = 0;
 varco::varco(double d) {
 	dist = d;
-	id = count++;
+	id = countVarc++;
 }
 double varco::getDist()  const {
 	return dist;
