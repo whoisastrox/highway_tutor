@@ -2,7 +2,7 @@
 #define VARCO_H
 class varco {
 private:
-	static int count;
+	static int countVarc;
 	int id;
 	double dist;
 
@@ -10,5 +10,6 @@ public:
 	varco(double);
 	double getDist() const;
 	int getId() const;
+	~varco();
 };
 #endif

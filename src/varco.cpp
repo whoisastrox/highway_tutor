@@ -10,3 +10,7 @@ double varco::getDist()  const {
 int varco::getId()  const {
 	return id;
 }
+varco::~varco() {
+	id = 0;
+	dist = 0;
+}
