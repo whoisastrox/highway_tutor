@@ -104,3 +104,7 @@ Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vec
 		delete svincoli[i];
 	}
 }
+double Autostrada::getLungh() {
+	ordina();
+	return svincoli[svincoli.size()-1]->getDist();
+}

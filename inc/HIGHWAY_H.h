@@ -19,6 +19,7 @@ public:
 	vector<varco*>::iterator iterVarchi();
 	vector<svincolo> getCoppia();
 	~Autostrada();
+	double getLungh();
 };
 
 
