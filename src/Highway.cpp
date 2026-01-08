@@ -84,7 +84,7 @@ vector<svincolo> Autostrada::getCoppia() {
 	}
 	else {
 		ingresso = rand() % (svincoli.size() - 2); //genera un numero casuale tra 0 e v.size()-2 in modo da non includere l'ultimo svincolo come svincolo di ingresso
-		uscita = ingresso + 1 + rand() % (svincoli.size() - 1);//genera un numero casuale successivo a ingresso e che sia al massimo l'ultimo svincolo
+		uscita = ingresso + 1 + rand() % (svincoli.size()-1);//genera un numero casuale successivo a ingresso e che sia al massimo l'ultimo svincolo
 	}
 	if (uscita > svincoli.size() - 1) {
 		uscita = svincoli.size() - 1;
@@ -107,4 +107,15 @@ Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vec
 double Autostrada::getLungh() {
 	ordina();
 	return svincoli[svincoli.size()-1]->getDist();
+}
+Autostrada::Autostrada(const Autostrada& a) { //costruttore di copia, copia le liste, altrimenti avrei shallow copy
+
+	for (int i = 0; i < a.svincoli.size(); i++) {
+		svincolo* s = new svincolo(*(a.svincoli[i])); 
+		svincoli.push_back(s);
+	}
+	for (int j = 0; j < a.varchi.size(); j++) {
+		varco* v = new varco(*(a.varchi[j]));
+		varchi.push_back(v);
+	}
 }

@@ -1,10 +1,12 @@
-#include "../inc/PROFILO_VELOCITA_H.h"
+#include "PROFILO_VELOCITA_H.h"
 #include <cstdlib>
 #include <cmath>
 #include <vector>
 using namespace std;
 
-profiloVelocita::profiloVelocita() {}
+profiloVelocita::profiloVelocita() {
+    intervalli={ };
+}
 
 void profiloVelocita::aggiungiIntervallo(int velocita, int durata) {
     intervalli.push_back({velocita, durata});
@@ -32,8 +34,7 @@ double profiloVelocita::tempoTotale() const {
     }
     return tempo;
 }
-profiloVelocita profiloVelocita::profiloCasuale(double dist) {
-    profiloVelocita p;
+void profiloVelocita::profiloCasuale(double dist) {
     const int V_MIN = 80;
     const int V_MAX = 190;
     const int T_MIN = 5;
@@ -43,13 +44,9 @@ profiloVelocita profiloVelocita::profiloCasuale(double dist) {
         int v = V_MIN+rand()%(V_MAX-V_MIN+1);
         int t = T_MIN+rand()%(T_MAX-T_MIN+1);
         double dIntervallo = v*(t/60.0);
-        if (distanzaPercorsa + dIntervallo > dist) {
-            t = static_cast<int>(ceil((dist - distanzaPercorsa)*60.0/v)); //tronco ultimo intervallo
-        }
-        p.aggiungiIntervallo(v, t);
-        distanzaPercorsa += v*(t/60.0);
+        this->aggiungiIntervallo(v, t);
+        distanzaPercorsa += dIntervallo;
     }
-    return p;
 }
 profiloVelocita::~profiloVelocita() {
     intervalli.clear();

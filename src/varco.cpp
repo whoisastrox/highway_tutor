@@ -14,3 +14,7 @@ varco::~varco() {
 	id = 0;
 	dist = 0;
 }
+varco::varco(const varco& v) {
+	dist = v.dist;
+	id = v.id;
+}

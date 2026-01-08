@@ -14,7 +14,7 @@ class profiloVelocita {
         const vector<intervallo>& getIntervalli() const;
         double distanzaPercorsa() const;
         double tempoTotale() const;
-        static profiloVelocita profiloCasuale(double dist); //crea profilo causale che copre distanza che gli passo 
+        void profiloCasuale(double dist); //crea profilo causale che copre distanza che gli passo 
 	    ~profiloVelocita();
     
     private:

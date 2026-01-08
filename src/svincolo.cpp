@@ -17,6 +17,10 @@ string svincolo::toString() const {
 	cout << id << endl;
 	return "<" + to_string(id) + ">" + "<" + to_string(dist) + ">";
 }
+svincolo::svincolo(const svincolo& s) {
+	dist = s.dist;
+	id = s.id;
+}
 svincolo::~svincolo() {
 	id = 0;
 	dist = 0;

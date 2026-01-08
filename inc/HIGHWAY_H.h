@@ -20,6 +20,7 @@ public:
 	vector<svincolo> getCoppia();
 	~Autostrada();
 	double getLungh();
+	Autostrada(const Autostrada&);
 };
 
 

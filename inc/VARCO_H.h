@@ -11,5 +11,7 @@ public:
 	double getDist() const;
 	int getId() const;
 	~varco();
+	varco(const varco&);
+
 };
 #endif

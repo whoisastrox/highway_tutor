@@ -14,5 +14,6 @@ public:
 	int getId() const;
 	string toString() const;
 	~svincolo();
+	svincolo(const svincolo&);
 };
 #endif
