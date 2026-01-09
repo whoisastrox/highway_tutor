@@ -13,7 +13,7 @@ private:
 	};
 	
 public:
-	datatime(int giorno,int mese,int anno,int ore,int minuti,int secondi);
+	datatime(int giorno,int mese,int anno,int ore,int minuti,double secondi);
 	datatime();
 	int getGiorno() const;
 	int getMese() const;
@@ -22,6 +22,8 @@ public:
 	int getMinuti() const;
 	double getSecondi() const;
 	void fillRandomData();
+	void incrementaData(double s);
+	bool checkBisestile(int anno) const;
 	int giorniMese(int m) const;
 };
 ostream& operator<<(std::ostream& os, const datatime& d);

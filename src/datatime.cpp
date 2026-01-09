@@ -1,6 +1,7 @@
-#include "DATATIME_H.h"
+#include "../inc/DATATIME_H.h"
 #include <stdexcept>
 #include <iostream>
+#include <cmath>
 using namespace std;
 
 datatime::datatime() {
@@ -12,8 +13,8 @@ datatime::datatime() {
 	secondi = 0;
 }
 
-datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, int secondi) {
-    if (mese < 1 || mese > 12) { //controllo se il mese è valido
+datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, double secondi) {
+    if (mese < 1 || mese > 12) { //controllo se il mese ï¿½ valido
         throw std::invalid_argument("Mese non valido");
     }
     if (giorno < 1 || giorno > giorniMese(mese)) { //controllo giorni
@@ -33,7 +34,7 @@ datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, int seco
 int datatime::giorniMese(int m) const {
     switch (m) {
     case 1:  return GEN; 
-    case 2:  return FEB; 
+    case 2:  return checkBisestile(anno) ? 29 : FEB; //febbraio diventa di 29 giorni se bisestile
     case 3:  return MAR;
     case 4:  return APR; 
     case 5:  return MAG; 
@@ -54,6 +55,36 @@ void datatime::fillRandomData() {
     giorno = rand() % (giorniMese(mese) + 1);
     ore = rand() % 24;
     minuti = rand() % 60;
+    secondi = rand() % 60;     
+}
+void datatime::incrementaData(double s){
+    if(s<0){ 
+        throw std::invalid_argument("Valore non valido");
+    }
+    secondi += s; //sommo secondi che ho gia + secondi che gli passo
+    if(secondi>=60.0){
+        minuti += static_cast<int>(secondi/60);
+        secondi=fmod(secondi,60.0); //fa stessa operazione di % ma per i numeri reali, quindi torna resto divisione tra numeri reali
+    }
+    if(minuti>=60){
+        ore += minuti/60;
+        minuti = minuti%60;
+    }
+    if(ore>=24){
+        giorno += ore/24;
+        ore = ore%24;
+    }
+    while(giorno>giorniMese(mese)) {
+        giorno -= giorniMese(mese);
+        mese++;
+        if (mese>12) {
+            mese = 1;
+            anno++;
+        }
+    }
+}
+bool datatime::checkBisestile(int anno) const { //bisestile se divisibile per 4 ma non per 100, o se divisibile per 400
+    return (anno%4 == 0 && anno%100 != 0) || (anno%400 == 0);
 }
 ostream& operator<<(ostream& os, const datatime& d) {
     os << d.getGiorno() << "/"
