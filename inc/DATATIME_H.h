@@ -5,7 +5,8 @@ using namespace std;
 	
 class datatime {
 private:
-	int giorno, mese, anno, ore, minuti, secondi;
+	int giorno, mese, anno, ore, minuti;
+	double secondi;
 	enum GiorniMese {
 		GEN = 31, FEB = 28, MAR = 31, APR = 30, MAG = 31, GIU = 30,
 		LUG = 31, AGO = 31, SET = 30, OTT = 31, NOV = 30, DIC = 31
@@ -19,7 +20,7 @@ public:
 	int getAnno() const;
 	int getOre() const;
 	int getMinuti() const;
-	int getSecondi() const;
+	double getSecondi() const;
 	void fillRandomData();
 	int giorniMese(int m) const;
 };

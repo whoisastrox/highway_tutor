@@ -21,7 +21,7 @@ datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, int seco
     }
     if (ore < 0 || ore > 23) throw std::invalid_argument("Ora non valide");
     if (minuti < 0 || minuti > 59) throw std::invalid_argument("Minuti non validi");
-    if (secondi < 0 || secondi > 59) throw std::invalid_argument("Secondi non validi");
+    if (secondi < 0 || secondi > 59.59) throw std::invalid_argument("Secondi non validi");
     this->giorno = giorno;
     this->mese = mese;
     this->anno = anno;
@@ -69,4 +69,4 @@ int datatime::getMese() const { return mese; }
 int datatime::getAnno() const { return anno; }
 int datatime::getOre() const { return ore; }
 int datatime::getMinuti() const { return minuti; }
-int datatime::getSecondi() const { return secondi; }
+double datatime::getSecondi() const { return secondi; }
