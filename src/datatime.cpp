@@ -50,10 +50,10 @@ int datatime::giorniMese(int m) const {
 void datatime::fillRandomData() {
     srand(time(NULL));
     anno = 1970 + rand() % (57);
-    mese = rand() % 12;
+    mese = rand() % 13;
     giorno = rand() % (giorniMese(mese) + 1);
     ore = rand() % 24;
-    minuti = rand() % 59;
+    minuti = rand() % 60;
 }
 ostream& operator<<(ostream& os, const datatime& d) {
     os << d.getGiorno() << "/"
