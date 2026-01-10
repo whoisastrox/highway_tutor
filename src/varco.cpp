@@ -1,4 +1,4 @@
-#include "VARCO_H.h"
+#include "../inc/VARCO_H.h"
 int varco::countVarc = 0;
 varco::varco(double d) {
 	dist = d;

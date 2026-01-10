@@ -1,6 +1,6 @@
-#include "VEHICLE_H.h"
+#include "../inc/VEHICLE_H.h"
 #include <string>
-#include "PROFILO_VELOCITA_H.h"
+#include "../inc/PROFILO_VELOCITA_H.h"
 using namespace std;
 vehicle::vehicle(const string& targa, int svincoloIngresso, int svincoloUscita, datatime istanteIngresso, const profiloVelocita& p) : targa(targa), svincoloIngresso(svincoloIngresso), svincoloUscita(svincoloUscita), istanteIngresso(istanteIngresso), p(p) {}
 

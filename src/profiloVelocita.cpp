@@ -1,7 +1,8 @@
-#include "PROFILO_VELOCITA_H.h"
+#include "../inc/PROFILO_VELOCITA_H.h"
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <random>
 using namespace std;
 
 profiloVelocita::profiloVelocita() {
@@ -35,14 +36,18 @@ double profiloVelocita::tempoTotale() const {
     return tempo;
 }
 void profiloVelocita::profiloCasuale(double dist) {
+    static  random_device rd;
+    static  mt19937 gen(rd());
     const int V_MIN = 80;
     const int V_MAX = 190;
     const int T_MIN = 5;
     const int T_MAX = 15;
+    uniform_int_distribution<int> distV(V_MIN, V_MAX);
+    uniform_int_distribution<int> distT(T_MIN, T_MAX);
     double distanzaPercorsa = 0.0;
     while(distanzaPercorsa < dist){
-        int v = V_MIN+rand()%(V_MAX-V_MIN+1);
-        int t = T_MIN+rand()%(T_MAX-T_MIN+1);
+        int v = distV(gen);
+        int t = distV(gen);
         double dIntervallo = v*(t/60.0);
         this->aggiungiIntervallo(v, t);
         distanzaPercorsa += dIntervallo;
