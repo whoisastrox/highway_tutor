@@ -1,7 +1,9 @@
-#include "../inc/DATATIME_H.h"
+#include "DATATIME_H.h"
 #include <stdexcept>
 #include <iostream>
 #include <cmath>
+#include <sstream>
+#include <iomanip>
 using namespace std;
 
 datatime::datatime() {
@@ -101,3 +103,26 @@ int datatime::getAnno() const { return anno; }
 int datatime::getOre() const { return ore; }
 int datatime::getMinuti() const { return minuti; }
 double datatime::getSecondi() const { return secondi; }
+datatime::~datatime() {
+    giorno = 0;
+    anno = 0;
+    mese = 0;
+    ore = 0;
+    minuti = 0;
+    secondi = 0;
+}
+datatime::datatime(const datatime& d) {
+    giorno = d.giorno;
+    mese = d.mese;
+    anno = d.anno;
+    ore = d.ore;
+    minuti = d.minuti;
+    secondi = d.secondi;
+}
+string datatime::toString() {
+    secondi = floor(secondi * 1000) / 1000;//tronco a 3 decimali
+    stringstream stream;
+    stream << std::fixed <<setprecision(3) << secondi;
+    std::string sec = stream.str();
+    return to_string(giorno) + "/"+ to_string(mese) + "/"+ to_string(anno) + " "+ to_string(ore) + ":"+ to_string(minuti) + ":" + sec;
+}

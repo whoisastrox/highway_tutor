@@ -124,7 +124,7 @@ static double randomTime() { //genera un double tra 0.5 e 10
 	mt19937 m(random());
 	uniform_real_distribution<double> tempo{ 0.5, 10.0 }; //definizione intervallo
 	double time = tempo(m); //generazione valore
-	time= floor(time * 100) / 100; //tronco a 2 decimali
+	time= floor(time * 1000) / 1000; //tronco a 3 decimali
 	return time;
 }
 
