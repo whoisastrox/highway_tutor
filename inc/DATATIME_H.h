@@ -1,6 +1,7 @@
 #ifndef DATATIME_H
 #define DATATIME_H
 #include <iostream>
+#include <string>
 using namespace std;
 	
 class datatime {
@@ -25,6 +26,9 @@ public:
 	void incrementaData(double s);
 	bool checkBisestile(int anno) const;
 	int giorniMese(int m) const;
+	~datatime();
+	datatime(const datatime&);
+	string toString();
 };
 ostream& operator<<(std::ostream& os, const datatime& d);
 #endif

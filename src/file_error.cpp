@@ -1,7 +1,7 @@
-#include "../inc/FILE_ERROR_H.h"
+#include "FILE_ERROR_H.h"
 #include <stdexcept>
 file_error::file_error(int x) :runtime_error("Errore file"), error_value(x) {}
-const char* file_error::what() const  noexcept{
+const char* file_error::what() const{
 	switch (error_value)
 	{
 		case 0: return "formattazione del file errata";break;

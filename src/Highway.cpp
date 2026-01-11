@@ -1,29 +1,28 @@
-#include "../inc/HIGHWAY_H.h"
-#include "../inc/SVINCOLO_H.h"
-#include "../inc/VARCO_H.h"
+#include "HIGHWAY_H.h"
+#include "SVINCOLO_H.h"
+#include "VARCO_H.h"
 #include <fstream>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include "../inc/FILE_ERROR_H.h"
+#include "FILE_ERROR_H.h"
 #include <string>
 #include <sstream>
-#include <ctime>
 #include <random>
 using namespace std;
 Autostrada::Autostrada(){
-	ifstream fileInput("../Data/Highway.txt");
+	ifstream fileInput("Highway.txt");
     string riga;	
-	while (getline(fileInput, riga)) {
+	while (std::getline(fileInput, riga)) {
 		stringstream ss(riga);
 		double distanza;
 		char tipo;
 		char scarto; //dove metto gli scarti(<>)	
-		//cout << riga;
+		//std::cout << riga;
 		if (!(ss >> scarto >> distanza >> scarto >> scarto >> tipo >> scarto)) { //salta in automatico gli scarti
 			throw file_error(0);
 		}
-		cout << "dist:" << distanza << "tipo:" << tipo<<endl;
+		//std::cout << "dist:" << distanza << "tipo:" << tipo<<endl;
 		double dist = distanza;
 		if (tipo == 'S') {
 			svincolo* s = new svincolo(dist); //uso allocazione dinamica, altrimenti quando esco dallo
@@ -46,7 +45,7 @@ Autostrada::Autostrada(){
 	//dist minima tra svincolo e varco di 1 km
 	for (int i = 0; i < varchi.size(); i++) {
 		for (int j = 0; j < svincoli.size(); j++) {
-			if ((abs((*varchi[i]).getDist() - (*svincoli[j]).getDist()) < 1)) { //uso dereference perchÃ¨ ho dei vector di puntatori
+			if ((abs((*varchi[i]).getDist() - (*svincoli[j]).getDist()) < 1)) { //uso dereference perchè ho dei vector di puntatori
 				throw file_error(3);
 			}
 		}
@@ -60,12 +59,12 @@ Autostrada::Autostrada(){
 }
 
 void Autostrada::ordina() {
-	sort(varchi.begin(), varchi.end(),
+	std::sort(varchi.begin(), varchi.end(),
 		[](const varco* a, const varco* b)
 		{ return a->getDist() < b->getDist(); }
 	);
 
-	sort(svincoli.begin(), svincoli.end(),
+	std::sort(svincoli.begin(), svincoli.end(),
 		[](const svincolo* a, const svincolo* b)
 		{ return a->getDist() < b->getDist(); }
 	);
@@ -77,20 +76,29 @@ vector<svincolo*>::iterator Autostrada::iterSvincoli() {
 vector<varco*>::iterator Autostrada::iterVarchi() {
 	return varchi.begin();
 }
+vector<svincolo*>::iterator Autostrada::iterSvincoliEnd() {
+	return svincoli.end();
+}
+vector<varco*>::iterator Autostrada::iterVarchiEnd() {
+	return varchi.end();
+}
 vector<svincolo> Autostrada::getCoppia() {
-	static random_device rd;
-    static mt19937 gen(rd());
+	random_device random;
+	mt19937 m(random());
 	int ingresso, uscita;
 	if (svincoli.size() == 2) {
-        ingresso = 0;
-        uscita = 1;
-    } else {
-        uniform_int_distribution<int> distIngresso(0, svincoli.size() - 2);//intervallo fino al penultimo svincolo
-        ingresso = distIngresso(gen);
-		//da svincolo dopo a ultimo
-        uniform_int_distribution<int> distUscita(ingresso + 1, svincoli.size() - 1);
-        uscita = distUscita(gen);
-    }
+		ingresso = 0;
+		uscita = 1;
+	}
+	else {
+		uniform_int_distribution<int> primo( 0, svincoli.size() - 2 );
+		ingresso = primo(m); //genera un numero casuale tra 0 e v.size()-2 in modo da non includere l'ultimo svincolo come svincolo di ingresso
+		uniform_int_distribution<int> secondo( ingresso+1 , svincoli.size() - 1 );
+		uscita = secondo(m);//genera un numero casuale successivo a ingresso e che sia al massimo l'ultimo svincolo
+	}
+	if (uscita > svincoli.size() - 1) {
+		uscita = svincoli.size() - 1;
+	}
 	ordina(); //ordino gli svincoli (e anche i varchi) in modo da poter prendere lo svincolo nel vector con indice ingresso/uscita correttamente
 	vector<svincolo> ret;
 	ret.push_back(*svincoli[ingresso]);
@@ -98,7 +106,7 @@ vector<svincolo> Autostrada::getCoppia() {
 	return ret;
 }
 
-Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vector perchÃ¨ allocati nella heap
+Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vector perchè allocati nella heap
 	for (int i = 0; i < varchi.size(); i++) {
 		delete varchi[i];
 	}

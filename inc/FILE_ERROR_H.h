@@ -7,7 +7,7 @@ class file_error : public runtime_error {
 		int error_value;
 	public:
 		file_error(int);
-		const char* what() const noexcept override;
+		const char* what() const;
 };
 
 #endif

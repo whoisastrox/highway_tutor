@@ -2,7 +2,8 @@
 #define SIMULATORE_H
 #include "HIGHWAY_H.h"
 #include "DATATIME_H.h"
-static void creaVeicolo(Autostrada , datatime& d);
+#include "VEHICLE_H.h"
+static vehicle* creaVeicolo(Autostrada , datatime& d, string&);
 static double randomTime();
 static datatime impostaData(datatime&);
 

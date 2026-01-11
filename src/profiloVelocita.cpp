@@ -1,8 +1,11 @@
-#include "../inc/PROFILO_VELOCITA_H.h"
+#include "PROFILO_VELOCITA_H.h"
 #include <cstdlib>
 #include <cmath>
 #include <vector>
+#include <ctime>
+#include <iostream>
 #include <random>
+#include <string>
 using namespace std;
 
 profiloVelocita::profiloVelocita() {
@@ -36,18 +39,14 @@ double profiloVelocita::tempoTotale() const {
     return tempo;
 }
 void profiloVelocita::profiloCasuale(double dist) {
-    static  random_device rd;
-    static  mt19937 gen(rd());
-    const int V_MIN = 80;
-    const int V_MAX = 190;
-    const int T_MIN = 5;
-    const int T_MAX = 15;
-    uniform_int_distribution<int> distV(V_MIN, V_MAX);
-    uniform_int_distribution<int> distT(T_MIN, T_MAX);
-    double distanzaPercorsa = 0.0;
+    double distanzaPercorsa = 0;
+    random_device random;
+    mt19937 m(random());
+    uniform_int_distribution<int> velocita{ 80, 190 };
+    uniform_int_distribution<int> tempo{ 5, 15 };
     while(distanzaPercorsa < dist){
-        int v = distV(gen);
-        int t = distV(gen);
+        int v = velocita(m);
+        int t = tempo(m);
         double dIntervallo = v*(t/60.0);
         this->aggiungiIntervallo(v, t);
         distanzaPercorsa += dIntervallo;
@@ -55,4 +54,49 @@ void profiloVelocita::profiloCasuale(double dist) {
 }
 profiloVelocita::~profiloVelocita() {
     intervalli.clear();
+}
+profiloVelocita::profiloVelocita(const profiloVelocita& p) {
+    for (int i = 0; i < p.intervalli.size(); i++) {
+        this->intervalli.push_back(p.intervalli[i]);
+    }
+}
+    ostream& operator<<(ostream& os, const profiloVelocita& p) {
+    //cout << p.getIntervalli().size();
+    for (int i = 0; i < p.getIntervalli().size(); i++) {
+        os << "<" << p.getIntervalli()[i].velocita << " " << p.getIntervalli()[i].durata << ">"<<" ";
+    }
+    return os;
+}
+
+double profiloVelocita::getIstantePassaggio(double spazio) {
+    double tempo = 0;
+    double d = 0;
+    int i = 0;
+    while (d < spazio && i<intervalli.size()) {
+       // cout << intervalli[i].velocita<<"spazio:"<<spazio<<endl;
+        double ds = (intervalli[i].durata/60.0)*intervalli[i].velocita;
+        //cout << "ds:" << ds << endl;
+        if (d + ds < spazio) {
+            d += ds;
+            tempo += (intervalli[i].durata*60.0); //in secondi
+        }
+        else {
+            double last = spazio-d;
+            //cout <<"last:"<< last<<"/vel:"<<intervalli[i].velocita<<endl;
+            double durataLast = (last / intervalli[i].velocita)*3600;
+            //cout <<"dur"<< durataLast<<endl;
+            tempo += durataLast;
+            d += last;
+        }
+        i++;
+        //cout<<"tempo" << tempo << endl;
+    }
+    return tempo;
+}
+string profiloVelocita::toString() {
+    string ret = "";
+    for (int i = 0; i < intervalli.size(); i++) {
+        ret=ret + "<" + to_string(intervalli[i].velocita) + " " + to_string(intervalli[i].durata) + ">" + " ";
+    }
+    return ret;
 }

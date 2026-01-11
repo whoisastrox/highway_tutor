@@ -17,6 +17,8 @@ public:
 	void ordina();
 	vector<svincolo*>::iterator iterSvincoli();
 	vector<varco*>::iterator iterVarchi();
+	vector<svincolo*>::iterator iterSvincoliEnd();
+	vector<varco*>::iterator iterVarchiEnd();
 	vector<svincolo> getCoppia();
 	~Autostrada();
 	double getLungh();

@@ -9,6 +9,7 @@ private:
 	double dist;
 
 public:
+	svincolo();
 	svincolo(double);
 	double getDist() const;
 	int getId() const;
@@ -16,4 +17,5 @@ public:
 	~svincolo();
 	svincolo(const svincolo&);
 };
+ostream& operator<<(ostream& os, const svincolo& s);
 #endif
