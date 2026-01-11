@@ -1,4 +1,4 @@
-#include "PROFILO_VELOCITA_H.h"
+#include "../inc/PROFILO_VELOCITA_H.h"
 #include <cstdlib>
 #include <cmath>
 #include <vector>
@@ -96,7 +96,7 @@ double profiloVelocita::getIstantePassaggio(double spazio) {
 string profiloVelocita::toString() {
     string ret = "";
     for (int i = 0; i < intervalli.size(); i++) {
-        ret=ret + "<" + to_string(intervalli[i].velocita) + " " + to_string(intervalli[i].durata) + ">" + " ";
+        ret=ret + "<" + to_string(intervalli[i].velocita) + " " + to_string(intervalli[i].durata) + ">" + ", ";
     }
     return ret;
 }

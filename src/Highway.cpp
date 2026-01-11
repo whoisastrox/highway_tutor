@@ -1,17 +1,17 @@
-#include "HIGHWAY_H.h"
-#include "SVINCOLO_H.h"
-#include "VARCO_H.h"
+#include "../inc/HIGHWAY_H.h"
+#include "../inc/SVINCOLO_H.h"
+#include "../inc/VARCO_H.h"
 #include <fstream>
 #include <iostream>
 #include <cmath>
 #include <algorithm>
-#include "FILE_ERROR_H.h"
+#include "../inc/FILE_ERROR_H.h"
 #include <string>
 #include <sstream>
 #include <random>
 using namespace std;
 Autostrada::Autostrada(){
-	ifstream fileInput("Highway.txt");
+	ifstream fileInput("../Data/Highway.txt");
     string riga;	
 	while (std::getline(fileInput, riga)) {
 		stringstream ss(riga);
@@ -45,7 +45,7 @@ Autostrada::Autostrada(){
 	//dist minima tra svincolo e varco di 1 km
 	for (int i = 0; i < varchi.size(); i++) {
 		for (int j = 0; j < svincoli.size(); j++) {
-			if ((abs((*varchi[i]).getDist() - (*svincoli[j]).getDist()) < 1)) { //uso dereference perchè ho dei vector di puntatori
+			if ((abs((*varchi[i]).getDist() - (*svincoli[j]).getDist()) < 1)) { //uso dereference perchï¿½ ho dei vector di puntatori
 				throw file_error(3);
 			}
 		}
@@ -106,7 +106,7 @@ vector<svincolo> Autostrada::getCoppia() {
 	return ret;
 }
 
-Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vector perchè allocati nella heap
+Autostrada::~Autostrada() { //dealloco gli svincoli e i varchi contenuti nei vector perchï¿½ allocati nella heap
 	for (int i = 0; i < varchi.size(); i++) {
 		delete varchi[i];
 	}

@@ -1,22 +1,22 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include "SIMULATORE_H.h"
-#include "HIGHWAY_H.h"
+#include "../inc/SIMULATORE_H.h"
+#include "../inc/HIGHWAY_H.h"
 #include <vector>
 #include <iostream>
 #include <stdexcept>
-#include "FILE_ERROR_H.h"
+#include "../inc/FILE_ERROR_H.h"
 #include <string>
 #include <vector>
-#include "DATATIME_H.h"
+#include "../inc/DATATIME_H.h"
 #include <random>
-#include "VEHICLE_H.h"
-#include "PROFILO_VELOCITA_H.h"
+#include "../inc/VEHICLE_H.h"
+#include "../inc/PROFILO_VELOCITA_H.h"
 #include <fstream>
 using namespace std;
 int main() {
 	const int numVeicoli = 10000;
 
-	ofstream pass("Passages.txt");
+	ofstream pass("../Data/Passages.txt");
 	if (!pass.is_open()) {
 		throw runtime_error("errore nell'apertura del file Passages.txt");
 	}
@@ -40,7 +40,7 @@ int main() {
 		datatime d{ giorno,mese,anno,ore,minuti,secondi };
 		//la data iniziale viene passata per reference in modo da essere incrementata ad ogni generazione
 		//di un veicolo
-		ofstream out("Runs.txt");
+		ofstream out("../Data/Runs.txt");
 		if (!out.is_open()) {
 			throw runtime_error("errore nell'apertura del file Runs.txt");
 		}
@@ -54,7 +54,7 @@ int main() {
 		}
 		out << runs;
 		out.close();
-		out=ofstream("Passages.txt", ios::app);
+		out=ofstream("../Data/Passages.txt", ios::app);
 		if (!out.is_open()) {
 			throw runtime_error("errore nell'apertura del file Passages.txt");
 		}
