@@ -2,6 +2,7 @@
 #define DATATIME_H
 #include <iostream>
 #include <string>
+
 using namespace std;
 	
 class datatime {
@@ -13,8 +14,11 @@ private:
 		LUG = 31, AGO = 31, SET = 30, OTT = 31, NOV = 30, DIC = 31
 	};
 	
+	tm tm_struct() const;
+	
 public:
 	datatime(int giorno,int mese,int anno,int ore,int minuti,double secondi);
+	datatime(double secondi);
 	datatime();
 	int getGiorno() const;
 	int getMese() const;
@@ -29,6 +33,23 @@ public:
 	~datatime();
 	datatime(const datatime&);
 	string toString();
+
+	bool operator<(const datatime& d);
+	bool operator>(const datatime& d);
+	bool operator==(const datatime& d);
+	
+	bool operator<(const double& s);
+	bool operator>(const double& s);
+	bool operator==(const double& s);
+	
+	double operator+(const datatime& d);
+	double operator-(const datatime& d);
+
+	double operator+(const double& s);
+	double operator-(const double& s);
+
+	double value() const;
+
 };
 ostream& operator<<(std::ostream& os, const datatime& d);
 #endif

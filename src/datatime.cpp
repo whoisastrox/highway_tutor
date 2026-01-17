@@ -4,6 +4,7 @@
 #include <cmath>
 #include <sstream>
 #include <iomanip>
+#include <ctime>
 using namespace std;
 
 datatime::datatime() {
@@ -15,6 +16,19 @@ datatime::datatime() {
 	secondi = 0;
 }
 
+datatime::datatime(const double d){
+    long s = static_cast<long>(d);
+    time_t t = time(&s);
+
+    tm *time = localtime(&t);
+    secondi = static_cast<double>(time->tm_sec) + (d-s);
+    minuti = time->tm_min;
+    ore = time->tm_hour;
+    giorno = time->tm_mday;
+    mese = time->tm_mon+1;
+    anno = time->tm_year+1900;
+}
+
 datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, double secondi) {
     if (mese < 1 || mese > 12) { //controllo se il mese � valido
         throw std::invalid_argument("Mese non valido");
@@ -24,7 +38,7 @@ datatime::datatime(int giorno, int mese, int anno, int ore, int minuti, double s
     }
     if (ore < 0 || ore > 23) throw std::invalid_argument("Ora non valide");
     if (minuti < 0 || minuti > 59) throw std::invalid_argument("Minuti non validi");
-    if (secondi < 0 || secondi > 59.59) throw std::invalid_argument("Secondi non validi");
+    if (secondi < 0 || secondi >= 60) throw std::invalid_argument("Secondi non validi");
     this->giorno = giorno;
     this->mese = mese;
     this->anno = anno;
@@ -125,4 +139,67 @@ string datatime::toString() {
     stream << std::fixed <<setprecision(3) << secondi;
     std::string sec = stream.str();
     return to_string(giorno) + "/"+ to_string(mese) + "/"+ to_string(anno) + " "+ to_string(ore) + ":"+ to_string(minuti) + ":" + sec;
+}
+
+/* returns seconds elapsed since epoch */
+double datatime::value() const {
+    tm t = tm_struct();
+    time_t s = mktime(&t);
+    double unused = 0;
+    return static_cast<double>(s) + modf(getSecondi(), &unused);        
+}
+
+tm datatime::tm_struct() const {
+    time_t now = time(nullptr);
+
+    tm time = {};
+    time.tm_sec = getSecondi();
+    time.tm_min = getMinuti();
+    time.tm_hour = getOre();
+    time.tm_mday = getGiorno();
+    time.tm_mon = getMese()-1;
+    time.tm_year = getAnno()-1900;
+    time.tm_zone = localtime(&now)->tm_zone;
+    time.tm_isdst = -1;
+
+    return time;
+}
+
+bool datatime::operator<(const datatime&d){
+    return value() < d.value();
+};
+
+bool datatime::operator>(const datatime&d){
+    return value() > d.value();
+};
+
+bool datatime::operator==(const datatime&d){
+    return value() == d.value();
+};
+
+bool datatime::operator<(const double& s){
+    return value() < s;
+};
+
+bool datatime::operator>(const double& s){
+    return value() > s;
+};
+
+bool datatime::operator==(const double& s){
+    return value() == s;
+};
+
+double datatime::operator+(const datatime& d){
+    return value() + d.value();
+}
+double datatime::operator-(const datatime& d){
+    return value() - d.value();
+}
+
+double datatime::operator-(const double& s){
+    return value() + s;
+}
+
+double datatime::operator+(const double& s){
+    return value() + s;
 }
