@@ -11,7 +11,7 @@
 #include <random>
 using namespace std;
 Autostrada::Autostrada(){
-	ifstream fileInput("../Data/Highway.txt");
+	ifstream fileInput("./Data/Highway.txt");
     string riga;	
 	while (std::getline(fileInput, riga)) {
 		stringstream ss(riga);
