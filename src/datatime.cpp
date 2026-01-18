@@ -171,8 +171,6 @@ tm datatime::tm_struct() const {
     time.tm_mday = getGiorno();
     time.tm_mon = getMese()-1;
     time.tm_year = getAnno()-1900;
-    time.tm_zone = localtime(&now)->tm_zone;
-    time.tm_isdst = -1;
 
     return time;
 }
