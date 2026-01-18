@@ -60,9 +60,9 @@ void Tutor::set_time(int forward_seconds){
         }else{
             //vehicle is passing for the first time
             vehiclesData.insert({passagesIt->plate, {
-                .plate = (*passagesIt).plate,
-                .first = &(*passagesIt),
-                .latest = &(*passagesIt)
+                (*passagesIt).plate,
+                &(*passagesIt),
+                &(*passagesIt)
             }});
         }
         // cambia ultimo passaggio con quello corrente
@@ -182,7 +182,7 @@ void Tutor::load_passages_from_file(){
         varco *v = vIt[gateId];
 
         Passage p = {
-            .gate = v, .plate = plate, .moment = d
+            v, plate, d
         };
         passages.push_back(p);
         
