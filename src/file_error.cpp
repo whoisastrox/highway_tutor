@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #include "../inc/FILE_ERROR_H.h"
 #include <stdexcept>
 file_error::file_error(int x) :runtime_error("Errore file"), error_value(x) {}

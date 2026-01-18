@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #include "../inc/SVINCOLO_H.h"
 #include <string>
 #include <iostream>

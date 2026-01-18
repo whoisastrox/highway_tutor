@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #ifndef HIGHWAY_H
 #define HIGHWAY_H
 #include "SVINCOLO_H.h"
@@ -9,7 +10,7 @@ using namespace std;
 class Autostrada {
 
 private:
-	vector<svincolo*> svincoli; //array di puntatori a svincoli e varchi perchè uso memoria heap
+	vector<svincolo*> svincoli; //array di puntatori a svincoli e varchi perchï¿½ uso memoria heap
 	vector<varco*> varchi;
 
 public:

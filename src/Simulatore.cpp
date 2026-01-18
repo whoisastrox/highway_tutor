@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #define _CRT_SECURE_NO_WARNINGS
 #include "../inc/SIMULATORE_H.h"
 #include "../inc/HIGHWAY_H.h"

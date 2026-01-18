@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #ifndef SIMULATORE_H
 #define SIMULATORE_H
 #include "HIGHWAY_H.h"

@@ -1,4 +1,6 @@
+#Leonardo Stella
 cmake_minimum_required(VERSION 3.10)
+
 project(TutorAutostradale)
 
 set(CMAKE_CXX_STANDARD 11)
@@ -14,7 +16,6 @@ add_executable(Simulatore
     src/profiloVelocita.cpp
     src/svincolo.cpp
     src/varco.cpp
-    src/vehicle_generator.cpp
     src/vehicle.cpp
     
     src/Simulatore.cpp

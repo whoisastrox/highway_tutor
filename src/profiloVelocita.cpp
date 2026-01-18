@@ -1,3 +1,4 @@
+//Giovanni Genzini
 #include "../inc/PROFILO_VELOCITA_H.h"
 #include <cstdlib>
 #include <cmath>

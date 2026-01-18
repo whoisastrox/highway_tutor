@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #ifndef SVINCOLO_H
 #define SVINCOLO_H
 #include <string>

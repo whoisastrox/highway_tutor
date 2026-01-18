@@ -1,3 +1,4 @@
+//Giovanni Genzini
 #include "../inc/VARCO_H.h"
 int varco::countVarc = 0;
 varco::varco(double d) {

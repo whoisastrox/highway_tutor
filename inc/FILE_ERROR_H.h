@@ -1,3 +1,4 @@
+//Alessandro Bonato
 #ifndef FILE_ERROR_H
 #define FILE_ERROR_H
 #include <stdexcept>

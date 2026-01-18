@@ -1,3 +1,4 @@
+//Giovanni Genzini
 #ifndef VARCO_H
 #define VARCO_H
 class varco {
