@@ -12,40 +12,54 @@
 
 const int MAX_SPEED = 130;
 
+Tutor::Tutor(){
+    try{   
+        highway = new Autostrada();
+    }catch(file_error &e){
+        cerr<<"error while initializing the highway object: "<<e.what()<<endl<<"exiting..."<<endl;
+    }
+    auto vIt = highway->iterVarchi();
+
+    while(vIt != highway->iterVarchiEnd()){
+        varchiCount.push_back(0);
+        vIt++;
+    }
+
+    load_passages_from_file();
+
+    passagesIt = passages.begin();
+    currentMoment = static_cast<int>( floor(passages[0].moment.value()) );
+    startingMoment = currentMoment;
+};
+
 void Tutor::set_time(int forward_seconds){
-    cout<<"setting time - adding "<<forward_seconds<<" seconds"<<endl;
+    //cout<<"setting time - adding "<<forward_seconds<<" seconds"<<endl;
 
     currentMoment += forward_seconds;    
     
     while(
         passagesIt != passages.end() && //checks that current and end are not the same
-        passagesIt->moment.value() < currentMoment //checks that current.moment is behind set moment
+        passagesIt->moment.value() < currentMoment //checks that current passage moment is behind set moment
     ){
         
-        cout<<"veicolo passato "<<passagesIt->plate;
+        //cout<<"veicolo passato "<<passagesIt->plate;
         
         auto vd = vehiclesData.find(passagesIt->plate);
 
         if(vd != vehiclesData.end()){
-            cout<<"- vd trovato";
-        }else{
-            cout<<"- vd non trovato";
-        }
-
-        if(vd != vehiclesData.end()){
-            //vehicle has already passed through a gate
-            // controlla se l'auto supera il limite, se necessario stampa la sanzione
-            cout<<" - computing speed ... ";
+            // vehicle has already passed through a gate
+            // checks if vehicle speed is over the limit, if so prints the 
+            //cout<<" - computing speed ... ";
             Passage *p1 = vd->second.latest;
             
             double speed = computeSpeed(p1, &(*passagesIt));
 
-            printf(" %.3fkm/s", speed);
+            //printf(" %.3fkm/s", speed);
             if(
                 (speed) > MAX_SPEED
             ){
                 //print sanction
-                printf("\nsanzione: %s - tratta <%d - %d> - velocità media: %.2fkm/h - instanti di passaggio %s - %s",
+                printf("\nsanzione: %s - tratta <%d - %d> - velocità media: %.2fkm/h - instanti di passaggio %s - %s\n",
                     p1->plate.c_str(),
                     p1->gate->getId(), passagesIt->gate->getId(),
                     speed,
@@ -54,7 +68,6 @@ void Tutor::set_time(int forward_seconds){
                 sanctionedVehicles++;
             }
             
-            // aggiungi stats per varco, plate, velocità etc
             varchiCount[passagesIt->gate->getId()] += 1;
             vd->second.latest = &(*passagesIt);
             
@@ -69,7 +82,6 @@ void Tutor::set_time(int forward_seconds){
         // cambia ultimo passaggio con quello corrente
         
         passagesIt++;
-        cout<<endl;
     }
 };
 
@@ -119,23 +131,6 @@ void Tutor::stats(){
     cout<<endl;
 
     printf("///TOTALE VEICOLI SANZIONATI: %d\n", sanctionedVehicles);
-};
-
-Tutor::Tutor(){
-    highway = new Autostrada();
-
-    auto vIt = highway->iterVarchi();
-
-    while(vIt != highway->iterVarchiEnd()){
-        varchiCount.push_back(0);
-        vIt++;
-    }
-
-    load_passages_from_file();
-
-    passagesIt = passages.begin();
-    currentMoment = static_cast<int>( floor(passages[0].moment.value()) );
-    startingMoment = currentMoment;
 };
 
 void Tutor::load_passages_from_file(){

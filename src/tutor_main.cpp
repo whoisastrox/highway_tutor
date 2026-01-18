@@ -47,7 +47,7 @@ int main(){
             continue;
         }
         
-        cout<<"either use set_time, reset or stats"<<endl;
+        cout<<"either use commands set_time, reset or stats"<<endl;
     }
 
     return 0;
