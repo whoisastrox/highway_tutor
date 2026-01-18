@@ -59,7 +59,7 @@ void Tutor::set_time(int forward_seconds){
                 (speed) > MAX_SPEED
             ){
                 //print sanction
-                printf("\nsanzione: %s - tratta <%d - %d> - velocità media: %.2fkm/h - instanti di passaggio %s - %s\n",
+                printf("sanzione: %s - tratta <%d - %d> - velocità media: %.2fkm/h - instanti di passaggio %s - %s\n",
                     p1->plate.c_str(),
                     p1->gate->getId(), passagesIt->gate->getId(),
                     speed,
