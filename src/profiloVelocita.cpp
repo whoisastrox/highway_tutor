@@ -21,9 +21,6 @@ const vector<profiloVelocita::intervallo>& profiloVelocita::getIntervalli() cons
 }
 double profiloVelocita::distanzaPercorsa() const {
     double distanza = 0.0;
-    /*for(int i=0; i<intervalli.size(); i++){
-        distanza += intervalli[i].velocita*(intervalli[i].durata/60.0);
-    }*/
     for(const auto& i : intervalli) {
         distanza += i.velocita*(i.durata/60.0);
     }
@@ -31,9 +28,6 @@ double profiloVelocita::distanzaPercorsa() const {
 }
 double profiloVelocita::tempoTotale() const {
     double tempo = 0.0;
-    /*for(int i=0; i<intervalli.size(); i++){
-        tempo += intervalli[i].durata;
-    }*/
     for(const auto& i : intervalli) {
         tempo += i.durata;
     }
