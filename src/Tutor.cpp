@@ -12,42 +12,52 @@
 const int MAX_SPEED = 130;
 
 void Tutor::set_time(int forward_seconds){
-    currentMoment += forward_seconds;
-    cout<<"setting_time"<<endl;
-    cout<<static_cast<long>(passagesIt->moment.value())<<" - "<<currentMoment<<endl;
-    cout<<"found plate - "<<vehiclesData.find(passagesIt->plate)->second.plate<<endl;
-    cout<<"fine"<<endl;
+    cout<<"setting time - adding "<<forward_seconds<<" seconds"<<endl;
+
+    currentMoment += forward_seconds;    
+    
     while(
         passagesIt != passages.end() && //checks that current and end are not the same
-        passagesIt->moment < currentMoment //checks that current.moment is behind set moment
+        passagesIt->moment.value() < currentMoment //checks that current.moment is behind set moment
     ){
-        cout<<"veicolo passato "<<passagesIt->plate<<endl;
-        if(vehiclesData.find(passagesIt->plate) != vehiclesData.end()){
-            //vehicle has already passed through a gate
-            Passage *p1 = vehiclesData[(*passagesIt).plate].latest;
-            // controlla se l'auto supera il limite, se necessario stampa la sanzione
-            
-            double distance = passagesIt->gate->getDist() - p1->gate->getDist();
-            double interval = (passagesIt->moment - p1->moment)*3600;
+        
+        cout<<"veicolo passato "<<passagesIt->plate;
+        
+        auto vd = vehiclesData.find(passagesIt->plate);
 
+        if(vd != vehiclesData.end()){
+            cout<<"- vd trovato";
+        }else{
+            cout<<"- vd non trovato";
+        }
+
+        if(vd != vehiclesData.end()){
+            //vehicle has already passed through a gate
+            // controlla se l'auto supera il limite, se necessario stampa la sanzione
+            cout<<" - computing speed ... ";
+            Passage *p1 = vd->second.latest;
+            
+            double speed = computeSpeed(p1, &(*passagesIt));
+
+            printf(" %.3fkm/s", speed);
             if(
-                (distance / interval) > MAX_SPEED
+                (speed) > MAX_SPEED
             ){
                 //print sanction
-                printf("sanzione: %s - varchi %d a %d - velocità media: %.2fkm/h - instanti di passaggio %s - %s\n",
+                printf("\nsanzione: %s - tratta <%d - %d> - velocità media: %.2fkm/h - instanti di passaggio %s - %s",
                     p1->plate.c_str(),
                     p1->gate->getId(), passagesIt->gate->getId(),
-                    distance/interval,
+                    speed,
                     p1->moment.toString().c_str(), passagesIt->moment.toString().c_str()
                 );
                 sanctionedVehicles++;
             }
+            
             // aggiungi stats per varco, plate, velocità etc
             varchiCount[passagesIt->gate->getId()] += 1;
-            
+            vd->second.latest = &(*passagesIt);
             
         }else{
-            cout<<passagesIt->plate<<" inserting new vehicle data"<<endl;
             //vehicle is passing for the first time
             vehiclesData.insert({passagesIt->plate, {
                 .plate = (*passagesIt).plate,
@@ -58,69 +68,79 @@ void Tutor::set_time(int forward_seconds){
         // cambia ultimo passaggio con quello corrente
         
         passagesIt++;
+        cout<<endl;
     }
 };
 
 void Tutor::reset(){
     vehiclesData.clear();
+    
+    passagesIt = passages.begin();
+
     varchiCount.clear();
-    while(varchiIt != highway.iterVarchiEnd()){
+
+    auto vIt = highway->iterVarchi();
+    while(vIt != highway->iterVarchiEnd()){
         varchiCount.push_back(0);
-        varchiIt++;
+        vIt++;
     }
-    varchiIt = highway.iterVarchi();
+
     sanctionedVehicles = 0;
     
     currentMoment = startingMoment;
 };
 
 void Tutor::stats(){
+    cout<<"///STATISTICHE PER VARCO"<<endl;
     for(int i = 0; i<varchiCount.size(); i++){
         printf("verco %d, numero di veicoli transitati: %d (%.2f veicoli/min)\n",
             i, varchiCount[i], static_cast<double>(varchiCount[i])/(currentMoment - startingMoment)*60
         );
     }
+    cout<<endl;
+    
+    cout<<"///STATISTICHE PER VEICOLO"<<endl;
     auto dataIt = vehiclesData.begin();
     while(dataIt != vehiclesData.end()){
-        
-        if(dataIt->second.first == dataIt->second.latest){
-            dataIt++;
-            continue;
-        }
-        printf("veicolo %s, velocità media: %.2f\n",
-            dataIt->second.plate.c_str(),
-            (
-                dataIt->second.latest->gate->getDist() - dataIt->second.first->gate->getDist()
-            )/
-            (
-                (dataIt->second.latest->moment - dataIt->second.first->moment)*3600
-            )
+        printf("veicolo %s, velocità media: ",
+            dataIt->second.plate.c_str()
         );
+        if(dataIt->second.first == dataIt->second.latest){
+            cout<<"non calcolabile (troppi pochi varchi)"<<endl;
+        }else{
+            printf("%.2fkm/h\n",
+                computeSpeed(dataIt->second.first, dataIt->second.latest)
+            );
+        }
+        
         dataIt++;
     }
-    printf("veicoli sanzionati: %d\n", sanctionedVehicles);
+    cout<<endl;
+
+    printf("///TOTALE VEICOLI SANZIONATI: %d\n", sanctionedVehicles);
 };
 
 Tutor::Tutor(){
-    highway = Autostrada();
+    highway = new Autostrada();
 
-    varchiIt = highway.iterVarchi();
-    while(varchiIt != highway.iterVarchiEnd()){
+    highway->testfunction();
+
+    auto vIt = highway->iterVarchi();
+
+    while(vIt != highway->iterVarchiEnd()){
         varchiCount.push_back(0);
-        varchiIt++;
+        vIt++;
     }
-    
-    varchiIt = highway.iterVarchi();
 
     load_passages_from_file();
-    
+
     passagesIt = passages.begin();
     currentMoment = static_cast<int>( floor(passages[0].moment.value()) );
     startingMoment = currentMoment;
 };
 
 void Tutor::load_passages_from_file(){
-    varchiIt = highway.iterVarchi();
+    auto vIt = highway->iterVarchi();
     ifstream fileInput("./Data/Passages.txt");
     string riga;	
     while (std::getline(fileInput, riga)) {
@@ -149,7 +169,7 @@ void Tutor::load_passages_from_file(){
            throw file_error(0);
         } else {
             if (ss.peek() == '.') {
-                ss >> ms; // This reads ".833" as a double
+                ss >> ms;
             }
         }
         
@@ -161,7 +181,7 @@ void Tutor::load_passages_from_file(){
             moment.tm_min,
             static_cast<double>(moment.tm_sec) + ms
         );
-        varco *v = varchiIt[gateId];
+        varco *v = vIt[gateId];
 
         Passage p = {
             .gate = v, .plate = plate, .moment = d
@@ -169,12 +189,22 @@ void Tutor::load_passages_from_file(){
         passages.push_back(p);
         
     }
-    cout<<"reading successfull"<<endl;
-    cout<<"sorting"<<endl;
     sort(
         passages.begin(), passages.end(),
-        [](const Passage p1, const Passage p2) { return &(p1.moment) < &(p2.moment); }
+        [](const Passage p1, const Passage p2) { return p1.moment.value() < p2.moment.value(); }
     );
-    cout<<"sorting terminated"<<endl;
     return;
+};
+/*
+@return
+double - the average speed, in km/h, between the two passages 
+
+p1 represents the earliest passage, p2 the latest
+*/
+double Tutor::computeSpeed(Passage *p1, Passage *p2){
+    return (
+        p2->gate->getDist() - p1->gate->getDist()
+    ) / (
+        p2->moment.value() - p1->moment.value()
+    ) * 3600;
 };

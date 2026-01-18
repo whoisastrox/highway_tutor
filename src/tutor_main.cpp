@@ -9,7 +9,7 @@ int main(){
     Tutor tutor = Tutor();
 
     string latestInput = "";
-    cout<<"starting tutor system"<<endl;
+    cout<<"tutor system is ready to accept input"<<endl;
     while(true){
         getline(cin, latestInput);
         
@@ -23,28 +23,30 @@ int main(){
             char flag = ' ';
 
             if(! (ss >> quantity)){
-                cout<<"broken"<<endl;
+                cout<<"invalid time advance format, use either \"set_time <integer>\" or \"set_time <integer>m\" "<<endl;
                 continue;
             }
-            cout<<quantity<<endl;
             if(ss >> flag){
                 if(flag == 'm'){
                     quantity *= 60;
                 }
             }
 
-            cout<<quantity<<flag<<endl;
             tutor.set_time(quantity);
+            continue;
         }
         
         if(command == "reset"){
             tutor.reset();
+            continue;
         }
         
         if(command == "stats"){
             tutor.stats();
+            continue;
         }
         
+        cout<<"either use set_time, reset or stats"<<endl;
     }
 
     return 0;

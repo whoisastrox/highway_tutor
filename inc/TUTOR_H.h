@@ -18,21 +18,21 @@ class Tutor {
     
         Tutor();
     private:
-        Autostrada highway;
+        Autostrada *highway;
         map<string, TutorVehicleData> vehiclesData;
 
         vector<Passage> passages;
         vector<Passage>::iterator passagesIt;
 
         vector<int> varchiCount;
-        vector<varco*>::iterator varchiIt;
         
         int sanctionedVehicles = 0;
-        int currentMoment;
+        double currentMoment;
         int startingMoment;
         
 
         void load_passages_from_file();
+        double computeSpeed(Passage *p1, Passage *p2);
 };
 
 #endif
