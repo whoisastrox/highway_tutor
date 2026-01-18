@@ -111,6 +111,9 @@ void Tutor::stats(){
         );
     }
     cout<<endl;
+
+    //dalla consegna non è chiaro se la media vada calcolata per singolo veicolo o per tutti i veicoli in maniera aggregata
+    //ho scelto la prima modalità 
     
     cout<<"///STATISTICHE PER VEICOLO"<<endl;
     auto dataIt = vehiclesData.begin();
