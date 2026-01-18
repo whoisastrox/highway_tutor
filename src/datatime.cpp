@@ -17,11 +17,14 @@ datatime::datatime() {
 }
 
 datatime::datatime(const double d){
-    long s = static_cast<long>(d);
-    time_t t = time(&s);
+    long s = static_cast<long>(d); // seconds elapsed since epoch
 
-    tm *time = localtime(&t);
-    secondi = static_cast<double>(time->tm_sec) + (d-s);
+    double unused;
+    double ms = modf(d, &unused);
+    
+    tm *time = localtime(&s);
+
+    secondi = static_cast<double>(time->tm_sec) + ms;
     minuti = time->tm_min;
     ore = time->tm_hour;
     giorno = time->tm_mday;
@@ -133,12 +136,21 @@ datatime::datatime(const datatime& d) {
     minuti = d.minuti;
     secondi = d.secondi;
 }
-string datatime::toString() {
+string datatime::toString() const {
+    /*
     secondi = floor(secondi * 1000) / 1000;//tronco a 3 decimali
     stringstream stream;
     stream << std::fixed <<setprecision(3) << secondi;
     std::string sec = stream.str();
-    return to_string(giorno) + "/"+ to_string(mese) + "/"+ to_string(anno) + " "+ to_string(ore) + ":"+ to_string(minuti) + ":" + sec;
+    
+    //return to_string(giorno) + "/"+ to_string(mese) + "/"+ to_string(anno) + " "+ to_string(ore) + ":"+ to_string(minuti) + ":" + sec;
+    */
+    char buff[24];
+    snprintf(buff, 24, "%02d/%02d/%04d %02d:%02d:%06.3f",
+        getGiorno(), getMese(), getAnno(),
+        getOre(), getMinuti(), getSecondi()
+    );
+    return string(buff);
 }
 
 /* returns seconds elapsed since epoch */
@@ -196,10 +208,9 @@ double datatime::operator-(const datatime& d){
     return value() - d.value();
 }
 
-double datatime::operator-(const double& s){
-    return value() + s;
-}
-
 double datatime::operator+(const double& s){
     return value() + s;
+}
+double datatime::operator-(const double& s){
+    return value() - s;
 }

@@ -32,7 +32,7 @@ public:
 	int giorniMese(int m) const;
 	~datatime();
 	datatime(const datatime&);
-	string toString();
+	string toString() const;
 
 	bool operator<(const datatime& d);
 	bool operator>(const datatime& d);
@@ -52,4 +52,5 @@ public:
 
 };
 ostream& operator<<(std::ostream& os, const datatime& d);
+
 #endif
