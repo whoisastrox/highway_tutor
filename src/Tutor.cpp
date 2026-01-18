@@ -123,8 +123,6 @@ void Tutor::stats(){
 Tutor::Tutor(){
     highway = new Autostrada();
 
-    highway->testfunction();
-
     auto vIt = highway->iterVarchi();
 
     while(vIt != highway->iterVarchiEnd()){
