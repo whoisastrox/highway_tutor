@@ -1,5 +1,5 @@
 //Alessandro Bonato
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS //evita warnings
 #include "../inc/SIMULATORE_H.h"
 #include "../inc/HIGHWAY_H.h"
 #include <vector>
@@ -17,7 +17,7 @@ using namespace std;
 int main() {
 	const int numVeicoli = 10000;
 
-	ofstream pass("./Data/Passages.txt");
+	ofstream pass("./Data/Passages.txt"); //svuoto il file passages
 	if (!pass.is_open()) {
 		throw runtime_error("errore nell'apertura del file Passages.txt");
 	}
@@ -26,7 +26,7 @@ int main() {
 
 
 	try {
-		Autostrada a = {};
+		Autostrada *a = new Autostrada();
 		double trascorso = 0;
 
 		time_t t = time(0);
@@ -51,7 +51,7 @@ int main() {
 			vehicle* v=creaVeicolo(a, d, passages);
 			runs+=(*v).toString()+"\n";
 			delete v;
-			cout << "*";
+			//cout << "*";
 		}
 		out << runs;
 		out.close();
@@ -61,7 +61,7 @@ int main() {
 		}
 		out << passages;
 		out.close();
-		
+		delete a;
 		
 	}
 	catch (file_error& e) {
@@ -71,7 +71,7 @@ int main() {
 	return 0;
 }
 
-static vehicle* creaVeicolo(Autostrada a, datatime& trascorso, string& passages) {
+static vehicle* creaVeicolo(Autostrada *a, datatime& trascorso, string& passages) {
 	string targa = "";
 	//generazione targa
 	random_device random;
@@ -87,13 +87,13 @@ static vehicle* creaVeicolo(Autostrada a, datatime& trascorso, string& passages)
 	targa += static_cast<char>(lettere(m));
 	//cout << targa<<endl;
 
-	vector<svincolo> coppia = a.getCoppia();
+	vector<svincolo> coppia = a->getCoppia();
 
 	datatime d=impostaData(trascorso);
 	//cout << d << endl;
 	
 	profiloVelocita p = {};
-	p.profiloCasuale(a.getLungh());
+	p.profiloCasuale(a->getLungh());
 
 	const profiloVelocita profilo = p;
 
@@ -102,9 +102,9 @@ static vehicle* creaVeicolo(Autostrada a, datatime& trascorso, string& passages)
 	vehicle* v =new vehicle(t, coppia[0], coppia[1], d, profilo );
 
 	//generazione passaggio per i varchi:
-	a.ordina();
-	auto iter = a.iterVarchi();
-	while (iter != a.iterVarchiEnd() && (*iter)->getDist()<=coppia[1].getDist()) {
+	a->ordina();
+	auto iter = a->iterVarchi();
+	while (iter != a->iterVarchiEnd() && (*iter)->getDist()<=coppia[1].getDist()) {
 		if ((*iter)->getDist() >= coppia[0].getDist()) {
 			double tempo = p.getIstantePassaggio((*iter)->getDist());
 			//cout << tempo << endl;

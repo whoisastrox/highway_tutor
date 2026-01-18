@@ -1,5 +1,7 @@
 //Giovanni Genzini
 #include "../inc/VARCO_H.h"
+#include <iostream>
+using namespace std;
 int varco::countVarc = 0;
 varco::varco(double d) {
 	dist = d;
@@ -18,4 +20,8 @@ varco::~varco() {
 varco::varco(const varco& v) {
 	dist = v.dist;
 	id = v.id;
+}
+ostream& operator<<(ostream& os, const varco& v) {
+	os << "id: " << v.getId() << " dist: " << v.getDist();
+	return os;
 }

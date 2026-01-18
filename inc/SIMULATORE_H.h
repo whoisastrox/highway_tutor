@@ -4,7 +4,7 @@
 #include "HIGHWAY_H.h"
 #include "DATATIME_H.h"
 #include "VEHICLE_H.h"
-static vehicle* creaVeicolo(Autostrada , datatime& d, string&);
+static vehicle* creaVeicolo(Autostrada *, datatime& d, string&);
 static double randomTime();
 static datatime impostaData(datatime&);
 
